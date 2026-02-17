@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- KONFIGURATION ---
     // HIER DEINE GOOGLE APPS SCRIPT URL EINFÜGEN:
-    const scriptURL = 'HIER_DEINE_WEB_APP_URL_EINFUEGEN'; 
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxrCNjeTy5K_9N1jcZCYXMH6ONtITx25FWrjRf5cHFj2aJRjJ7kByR8uFwPQQiHWQlz/exec'; 
     
     // --- 1. Zeichenzähler Logik ---
     const counters = document.querySelectorAll('.counter');

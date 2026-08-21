@@ -1,0 +1,26 @@
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editoren
+.vscode/
+.idea/
+*.swp
+*~
+
+# Abhaengigkeiten / Build (aktuell nicht verwendet – der Fragebogen laeuft ohne Build)
+node_modules/
+dist/
+build/
+
+# Logs und temporaere Dateien
+*.log
+npm-debug.log*
+.tmp/
+tmp/
+
+# Lokale Konfiguration mit Zugangsdaten (NIE committen)
+config.local.js
+.env
+.env.*

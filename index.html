@@ -1,156 +1,221 @@
 <!DOCTYPE html>
-<html lang="de-CH">
+<html lang="de-CH" data-theme="light">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IT-Schnuppermorgen – Feedback</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>IT-Schnuppermorgen · Feedback | Bell Schweiz AG</title>
+  <meta name="description" content="Digitale Feedback-Erhebung zum IT-Schnuppermorgen der Bell Schweiz AG – barrierearm, mehrsprachig und direkt an die Auswertung angebunden." />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#070a0d" media="(prefers-color-scheme: dark)" />
+  <meta name="robots" content="noindex" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230d1116'/><ellipse cx='16' cy='14' rx='11' ry='8' fill='%23fe0000'/><path d='M7 20.2c2.9 3.2 5.8 4.4 9 4.4s6.1-1.2 9-4.4c-2.7 1.4-5.7 2-9 2s-6.3-.6-9-2z' fill='%2351b401'/></svg>" />
+
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/questionnaire.css" />
+  <link rel="stylesheet" href="assets/css/print.css" />
+
+  <!-- Theme vor dem ersten Paint setzen: verhindert Aufblitzen des falschen Themes -->
+  <script>
+    (function () {
+      try {
+        var stored = window.localStorage.getItem('bell-it-feedback:theme');
+        var theme = stored === 'light' || stored === 'dark' ? stored
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-theme-pref', stored || 'system');
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
 </head>
 <body>
 
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
+  <a class="skip-link" href="#step-body" data-i18n="skip.link">Direkt zum Fragebogen springen</a>
 
-  <main class="glass-container">
-    <header>
-      <div class="logo-area">
-        <div class="brand-mark">IT</div>
-        <div class="titles">
-          <h1>Feedback</h1>
-          <p>IT-Schnuppermorgen bei Bell Schweiz AG</p>
-        </div>
+  <!-- Dekorative Szene: Raster, Marken-Glows, Leiterbahnen -->
+  <div class="scene" aria-hidden="true">
+    <div class="scene__grid"></div>
+    <div class="scene__glow scene__glow--red"></div>
+    <div class="scene__glow scene__glow--green"></div>
+    <svg class="scene__circuit" width="100%" height="100%" role="presentation" focusable="false">
+      <defs>
+        <pattern id="circuit" width="240" height="240" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.16">
+            <path d="M0 60h64l18 18h60" />
+            <path d="M240 30h-52l-16 16h-48l-20 20v72" />
+            <path d="M12 180h58l22-22h70l20 20h58" />
+            <path d="M104 240v-40l-18-18H24" />
+          </g>
+          <g fill="currentColor" opacity="0.24">
+            <circle cx="142" cy="78" r="2.5" />
+            <circle cx="104" cy="86" r="2.5" />
+            <circle cx="172" cy="46" r="2.5" />
+            <circle cx="92" cy="158" r="2.5" />
+            <circle cx="182" cy="178" r="2.5" />
+            <circle cx="24" cy="180" r="2.5" />
+          </g>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#circuit)" />
+    </svg>
+  </div>
+
+  <div class="app">
+
+    <!-- ============================================================ Rail -->
+    <aside class="rail" aria-label="Navigation und Status">
+     <div class="rail__inner">
+      <div class="rail__brand">
+        <span class="rail__logo">
+          <img src="assets/img/bell-logo.png" alt="Bell" width="318" height="159" />
+        </span>
+        <span class="rail__brand-text">
+          <span class="rail__org">Bell Schweiz AG</span>
+          <span class="rail__title" data-i18n="app.title">IT-Schnuppermorgen</span>
+        </span>
       </div>
-      <img src="Bell_Logo (RMBG).png" alt="Bell Logo" class="corner-logo" onerror="this.style.display='none'">
+
+      <nav aria-label="Fortschritt des Fragebogens">
+        <p class="rail__section-label" data-i18n="rail.sections">Abschnitte</p>
+        <ol class="stepper" id="stepper"></ol>
+      </nav>
+
+      <div class="rail__spacer"></div>
+
+      <div class="rail__foot">
+        <div class="rail__controls">
+          <div class="segmented" role="group" aria-label="Farbschema">
+            <button type="button" class="segmented__opt" data-theme-option="light" aria-pressed="false" title="Helles Farbschema">Hell</button>
+            <button type="button" class="segmented__opt" data-theme-option="dark" aria-pressed="false" title="Dunkles Farbschema">Dunkel</button>
+            <button type="button" class="segmented__opt" data-theme-option="system" aria-pressed="true" title="Systemeinstellung übernehmen">Auto</button>
+          </div>
+          <div class="segmented" role="group" aria-label="Sprache / Language">
+            <button type="button" class="segmented__opt" data-lang-option="de" aria-pressed="true">DE</button>
+            <button type="button" class="segmented__opt" data-lang-option="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
+
+        <dl class="rail__meta">
+          <dt>Verbindung</dt>
+          <dd><span class="pill pill--live" id="status-connection"><span class="pill__dot"></span><span data-i18n="status.online">Online</span></span></dd>
+          <dt>Entwurf</dt>
+          <dd><span class="pill pill--muted" id="status-autosave"><span data-i18n="status.autosaveIdle">Autosave bereit</span></span></dd>
+        </dl>
+        <p class="rail__meta" style="opacity:.72">
+          <span id="status-version">v2.0.0</span>
+        </p>
+      </div>
+     </div>
+    </aside>
+
+    <!-- ========================================================= Topbar -->
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="topbar__logo"><img src="assets/img/bell-logo.png" alt="Bell" width="318" height="159" /></span>
+        <span>
+          <span class="topbar__sub">Bell Schweiz AG</span>
+          <span class="topbar__title" data-i18n="app.title">IT-Schnuppermorgen</span>
+        </span>
+      </div>
+      <div class="topbar__actions">
+        <button type="button" class="icon-btn" id="topbar-theme" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+        <button type="button" class="icon-btn" id="topbar-lang" aria-label="Sprache wechseln" title="Sprache wechseln">DE</button>
+      </div>
     </header>
 
-    <form id="feedbackForm">
-      
-      <div class="question-card">
-        <h3>Wie bewertest du den IT-Schnuppermorgen insgesamt?</h3>
-        <div class="grid-options">
-          <label class="custom-radio">
-            <input type="radio" name="gesamtbewertung" value="Äusserst gut" required>
-            <span class="radio-tile">
-              <span class="emoji">🤩</span>
-              <span class="label">Äusserst gut</span>
-            </span>
-          </label>
-          <label class="custom-radio">
-            <input type="radio" name="gesamtbewertung" value="Sehr gut">
-            <span class="radio-tile">
-              <span class="emoji">😃</span>
-              <span class="label">Sehr gut</span>
-            </span>
-          </label>
-          <label class="custom-radio">
-            <input type="radio" name="gesamtbewertung" value="Einigermassen gut">
-            <span class="radio-tile">
-              <span class="emoji">🙂</span>
-              <span class="label">Geht so</span>
-            </span>
-          </label>
-          <label class="custom-radio">
-            <input type="radio" name="gesamtbewertung" value="Eher nicht gut">
-            <span class="radio-tile">
-              <span class="emoji">😕</span>
-              <span class="label">Eher nicht</span>
-            </span>
-          </label>
+    <!-- ====================================================== Workspace -->
+    <main class="workspace">
+      <div class="workspace__inner">
+
+        <div id="banner-slot" aria-live="polite"></div>
+
+        <div class="progress">
+          <div class="progress__track" role="progressbar" id="progress-bar"
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+               aria-label="Ausfüllfortschritt">
+            <div class="progress__fill" id="progress-fill"></div>
+          </div>
+          <span class="progress__value" id="progress-value">0 %</span>
         </div>
+
+        <section class="panel" id="panel" aria-labelledby="step-title">
+          <header class="panel__head">
+            <div class="panel__kicker">
+              <span class="panel__step-index mono" id="step-index">01 / 04</span>
+              <span class="pill pill--accent" id="step-badge"><span data-i18n="badge.required">Pflichtangaben</span></span>
+            </div>
+            <h1 class="panel__title" id="step-title">Fragebogen wird geladen …</h1>
+            <p class="panel__lead" id="step-lead"></p>
+          </header>
+
+          <form id="feedback-form" novalidate>
+            <div class="panel__body" id="step-body" tabindex="-1">
+              <noscript>
+                <div class="noscript-banner">
+                  <strong>JavaScript ist deaktiviert.</strong>
+                  Dieser Fragebogen benötigt JavaScript, um die Antworten zu erfassen und
+                  sicher an die Auswertung zu übermitteln. Bitte aktiviere JavaScript und lade die Seite neu.
+                </div>
+              </noscript>
+            </div>
+
+            <footer class="panel__foot" id="panel-foot">
+              <p class="panel__foot-hint" id="foot-hint"></p>
+              <div class="panel__foot-actions">
+                <button type="button" class="btn btn--secondary" id="btn-back"></button>
+                <button type="submit" class="btn btn--primary" id="btn-next"></button>
+              </div>
+            </footer>
+          </form>
+        </section>
+
+        <section class="console" id="console" hidden>
+          <button type="button" class="console__toggle" id="console-toggle"
+                  aria-expanded="false" aria-controls="console-body">
+            <svg class="console__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            <span data-i18n="console.title">System-Log</span>
+            <span class="console__count" id="console-count">0</span>
+          </button>
+          <div class="console__body" id="console-body" hidden></div>
+        </section>
+
+        <footer class="workspace__foot">
+          <span id="foot-legal" data-i18n="foot.legal">Bell Schweiz AG · Informatik · Interne Feedback-Erhebung</span>
+          <span id="foot-tech" class="mono"></span>
+        </footer>
       </div>
+    </main>
+  </div>
 
-      <div class="question-card">
-        <h3>Wie haben dir die Workshops gefallen?</h3>
-        <div class="grid-options">
-          <label class="custom-radio">
-            <input type="radio" name="workshops" value="Top" required>
-            <span class="radio-tile"><span class="label">Sehr gut</span></span>
-          </label>
-          <label class="custom-radio">
-            <input type="radio" name="workshops" value="Gut">
-            <span class="radio-tile"><span class="label">Gut</span></span>
-          </label>
-          <label class="custom-radio">
-            <input type="radio" name="workshops" value="Okay">
-            <span class="radio-tile"><span class="label">Okay</span></span>
-          </label>
-          <label class="custom-radio">
-            <input type="radio" name="workshops" value="Nicht so">
-            <span class="radio-tile"><span class="label">Nicht so</span></span>
-          </label>
-        </div>
-      </div>
+  <div class="toast-stack" id="toast-stack" role="status" aria-live="polite" aria-atomic="false"></div>
 
-      <div class="question-card">
-        <h3>Welche Lehre kannst du dir vorstellen?</h3>
-        <p class="subtitle">Mehrfachauswahl möglich</p>
-        <div class="list-options">
-          <label class="custom-checkbox">
-            <input type="checkbox" name="lehre" value="Plattformentwicklung">
-            <span class="checkbox-tile">
-              <span class="icon">💻</span>
-              <span>Plattformentwicklung</span>
-            </span>
-          </label>
-          <label class="custom-checkbox">
-            <input type="checkbox" name="lehre" value="Applikationsentwicklung">
-            <span class="checkbox-tile">
-              <span class="icon">📱</span>
-              <span>Applikationsentwicklung</span>
-            </span>
-          </label>
-          <label class="custom-checkbox">
-            <input type="checkbox" name="lehre" value="ICT-Fachmann/-frau">
-            <span class="checkbox-tile">
-              <span class="icon">🛠️</span>
-              <span>ICT-Fachmann/-frau</span>
-            </span>
-          </label>
-        </div>
-      </div>
+  <!-- PDF-Export (optional). Faellt automatisch auf den Druckdialog zurueck,
+       falls das CDN in einem restriktiven Netz nicht erreichbar ist. -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-      <div class="question-card">
-        <h3>Was hat dir am meisten gefallen?</h3>
-        <div class="input-wrapper">
-          <textarea name="highlight" id="highlight" placeholder="Dein Highlight..." maxlength="600"></textarea>
-          <div class="focus-border"></div>
-        </div>
-        <small class="counter" data-for="highlight">0 / 600</small>
-      </div>
-
-      <div class="question-card">
-        <h3>Was können wir besser machen?</h3>
-        <div class="input-wrapper">
-          <textarea name="verbesserung" id="verbesserung" placeholder="Deine Ideen..." maxlength="600"></textarea>
-          <div class="focus-border"></div>
-        </div>
-        <small class="counter" data-for="verbesserung">0 / 600</small>
-      </div>
-
-      <div class="actions">
-        <button type="submit" class="btn btn-primary">
-          <span>Absenden</span>
-          <div class="shine"></div>
-        </button>
-        <button type="button" id="downloadBtn" class="btn btn-ghost" disabled>
-          <span>Kopie herunterladen 📥</span>
-        </button>
-      </div>
-
-      <div id="statusMessage" class="status-box hidden">
-        <h4>Vielen Dank! 🎉</h4>
-        <p>Deine Antworten wurden gespeichert.</p>
-      </div>
-
-    </form>
-  </main>
-
-  <script src="system.js"></script>
+  <!-- Applikationsmodule (Ladereihenfolge = Abhaengigkeitsreihenfolge) -->
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/schema.js"></script>
+  <script src="assets/js/validation.js"></script>
+  <script src="assets/js/state.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/render.js"></script>
+  <script src="assets/js/transport.js"></script>
+  <script src="assets/js/export.js"></script>
+  <script src="assets/js/wizard.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,70 @@
+/* =============================================================================
+   Print — sauberer Ausdruck / "Als PDF speichern" als Fallback zum PDF-Export
+============================================================================= */
+@media print {
+  @page { size: A4; margin: 18mm 16mm; }
+
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 10.5pt;
+  }
+
+  .scene,
+  .rail,
+  .topbar,
+  .toast-stack,
+  .console,
+  .progress,
+  .panel__foot,
+  .payload,
+  .done__actions,
+  .skip-link,
+  .banner,
+  .summary__edit,
+  .workspace__foot { display: none !important; }
+
+  .app { display: block; }
+  .workspace { padding: 0; }
+  .workspace__inner { max-width: none; gap: 0; }
+
+  .panel {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+  .panel__head { background: #fff !important; border-bottom: 1.5pt solid #e30613; padding: 0 0 8pt; }
+  .panel__body { padding: 10pt 0 0; }
+
+  .print-only { display: block !important; }
+
+  /* Nach dem Absenden druckt nur der Beleg – Bildschirm-Bestaetigung und
+     Kartenkopf waeren im Ausdruck doppelt. */
+  .panel[data-state='done'] .panel__head,
+  .panel[data-state='done'] .done { display: none !important; }
+  .panel::before { display: none !important; }
+
+  .print-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12pt;
+    padding-bottom: 8pt;
+    margin-bottom: 10pt;
+    border-bottom: 1.5pt solid #e30613;
+  }
+  .print-header img { height: 34pt; width: auto; }
+  .print-header__title { font-size: 14pt; font-weight: 700; }
+  .print-header__meta { font-family: var(--font-mono); font-size: 8pt; color: #444; text-align: right; }
+
+  .summary__group { break-inside: avoid; border-color: #ccc !important; }
+  .summary__group-head { background: #f3f3f3 !important; }
+  .summary__row { break-inside: avoid; }
+  .summary__tag { background: #eee !important; color: #000 !important; }
+
+  a[href]::after { content: ''; }
+}
+
+.print-only { display: none; }
+.print-header { display: none; }

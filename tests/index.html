@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de-CH" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selbsttests · Bell IT Feedback</title>
+  <meta name="robots" content="noindex" />
+
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+
+  <style>
+    body {
+      display: block;
+      padding: var(--space-8) var(--space-5);
+      background: var(--canvas);
+    }
+    .wrap { max-width: 60rem; margin: 0 auto; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      padding-bottom: var(--space-5);
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: var(--space-6);
+    }
+    h1 { font-size: var(--fs-2xl); letter-spacing: -0.025em; }
+    .sub { color: var(--text-muted); font-size: var(--fs-sm); margin-top: var(--space-1); }
+
+    .summary {
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+    }
+    .summary--ok { background: var(--success-soft); color: var(--success-text); border-color: var(--success); }
+    .summary--fail { background: var(--signal-danger-050); color: var(--signal-danger-500); border-color: var(--signal-danger-500); }
+
+    .result {
+      display: grid;
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      gap: var(--space-3);
+      align-items: baseline;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      margin-bottom: 6px;
+      font-size: var(--fs-sm);
+    }
+    .result--fail { border-color: var(--signal-danger-500); background: var(--signal-danger-050); }
+    .result__badge {
+      font-family: var(--font-mono);
+      font-size: var(--fs-3xs);
+      font-weight: 700;
+      letter-spacing: var(--tracking-caps);
+      color: var(--success-text);
+    }
+    .result--fail .result__badge { color: var(--signal-danger-500); }
+    .result__msg {
+      grid-column: 2;
+      display: block;
+      font-family: var(--font-mono);
+      font-size: var(--fs-2xs);
+      color: var(--signal-danger-500);
+      margin-top: 0.35rem;
+      white-space: pre-wrap;
+    }
+    .note {
+      margin-top: var(--space-6);
+      font-size: var(--fs-xs);
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Selbsttests</h1>
+        <p class="sub">Logikschicht des IT-Feedback-Fragebogens · ohne Build-Werkzeuge direkt im Browser</p>
+      </div>
+      <span class="summary" id="summary">läuft …</span>
+    </header>
+
+    <ul id="results"></ul>
+
+    <p class="note">
+      Die Tests pruefen insbesondere den unveraenderten Datenvertrag mit Google Sheets
+      (Feldnamen und Optionswerte), die Validierung, die Zustandslogik inklusive
+      Entwurfsspeicher sowie die Textbereinigung. Ergebnisse stehen zusaetzlich unter
+      <code>window.__TEST_RESULTS__</code> bereit.
+    </p>
+  </div>
+
+  <script src="../assets/js/core.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/schema.js"></script>
+  <script src="../assets/js/validation.js"></script>
+  <script src="../assets/js/state.js"></script>
+  <script src="../assets/js/render.js"></script>
+  <script src="../assets/js/transport.js"></script>
+  <script src="../assets/js/export.js"></script>
+  <script src="tests.js"></script>
+</body>
+</html>
